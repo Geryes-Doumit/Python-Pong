@@ -9,8 +9,8 @@ A, B = 0, 0  # Score
 ScoreReset = False
 width = 1200
 height = 650
-Latency = 40
-Speed = 13
+Latency = 30
+Speed = 10
 SpeedLimit = 50
 directions = [-math.pi / 4, math.pi / 4, 3 * math.pi / 4, -3 * math.pi / 4]
 direction = random.choice(directions)
@@ -76,7 +76,8 @@ def reset_canvas():
 
 def rUp(event):
     global TimeR, UpDownMoveR
-    TimeR = time.process_time()
+    TimeR = time.time()
+    # print("Right Move at:" + str(TimeR))
     UpDownMoveR = 1
     x1r, y1r, x2r, y2r = canvas.coords(rightRect)
     if y1r - 10 > 0:
@@ -85,7 +86,8 @@ def rUp(event):
 
 def rDown(event):
     global TimeR, UpDownMoveR
-    TimeR = time.process_time()
+    TimeR = time.time()
+    # print("Right Move at:" + str(TimeR))
     UpDownMoveR = -1
     global height
     x1r, y1r, x2r, y2r = canvas.coords(rightRect)
@@ -96,7 +98,8 @@ def rDown(event):
 def lUp(event):
     global TimeL, UpDownMovel
     UpDownMovel = 1
-    TimeL = time.process_time()
+    TimeL = time.time()
+    # print("Left Move at:" + str(TimeL))
     x1l, y1l, x2l, y2l = canvas.coords(leftRect)
     if y1l - 10 > 0:
         canvas.move(leftRect, 0, -30)
@@ -104,7 +107,8 @@ def lUp(event):
 
 def lDown(event):
     global TimeL, UpDownMovel
-    TimeL = time.process_time()
+    TimeL = time.time()
+    # print("Left Move at:" + str(TimeL))
     UpDownMovel = -1
     global height
     x1l, y1l, x2l, y2l = canvas.coords(leftRect)
@@ -137,7 +141,7 @@ def LeftRight_collisions():
     test = X_Speed, Y_Speed
 
     if x1 + X_Speed < x2l and y1l < y2 + Y_Speed < y2l:
-        HitTime = time.process_time()
+        HitTime = time.time()
         SpecialMovesL()
         if abs(X_Speed) < SpeedLimit:
             X_Speed *= -1.1
@@ -148,10 +152,10 @@ def LeftRight_collisions():
             i = random.uniform(-math.pi/6, math.pi/6)
             X_Speed *= math.cos(i)
             Y_Speed *= math.sqrt(SpeedSquared - X_Speed ** 2)'''
-        print(X_Speed / test[0], Y_Speed / test[1])
+        # print(X_Speed / test[0], Y_Speed / test[1])
 
     elif x1 + X_Speed > x2r - 45 and y1r < y2 + Y_Speed < y2r:
-        HitTime = time.process_time()
+        HitTime = time.time()
         SpecialMovesR()
         if abs(X_Speed) < SpeedLimit:
             X_Speed *= -1.1
@@ -163,7 +167,7 @@ def LeftRight_collisions():
             X_Speed *= math.cos(i)
             Y_Speed *= math.sqrt(SpeedSquared - X_Speed**2)'''
 
-        print(X_Speed / test[0], Y_Speed / test[1])
+        # print(X_Speed / test[0], Y_Speed / test[1])
 
 
 def autoReset():
@@ -192,6 +196,8 @@ def autoReset():
 
 def SpecialMovesL():
     global Y_Speed, X_Speed
+    # print("HitTime " + str(HitTime))
+    # print("hit - TimeL "+str(HitTime - TimeL))
     if HitTime - TimeL < 0.1:
         if Y_Speed * UpDownMovel < 0:
             X_Speed *= 1.1
@@ -205,6 +211,8 @@ def SpecialMovesL():
 
 def SpecialMovesR():
     global Y_Speed, X_Speed
+    # print("HitTime " + str(HitTime))
+    # print("hit - TimeR "+str(HitTime - TimeR))
     if HitTime - TimeR < 0.1:
         if Y_Speed * UpDownMovel > 0:
             X_Speed *= 1.1
